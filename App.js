@@ -5,8 +5,9 @@
  */
 
 // Library Imports
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
+import colors from 'chalk';
 import { Client } from 'discord.js';
 
 // Global Properties
