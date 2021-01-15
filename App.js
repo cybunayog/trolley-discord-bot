@@ -21,6 +21,36 @@ const CONFIG = {
 }
 
 // Built-in functions
+
+// The bots need to move to new VC's asynchronously
+// For now make 2 functions that will be called
+
+// Step 1) have the bot connect to a VC
+// Step 2) have the bot move from VC to VC
+// Step 3) detect if a user is in the VC
+// Step 4) have the user move with the bot
+// Step 5) if user is gone, the bot will continue its drive
+async function moveUserToEastCampusVC() {
+    // VC ID: 799674463414517761
+    const eastCampus = client.channels.cache.get("799674463414517761");
+    if (!eastCampus) return console.error('This channel does not exist!');
+    eastCampus.join()
+        .then(connection => {
+            // connected!
+            console.log("Successfully connected!");
+        })
+        .catch(e => {
+            // not connected
+            console.error(e);
+        });
+}
+
+async function moveUserToWestCampusVC() {
+    // VC ID: 799674506385555557
+    // message.author.voice.setChannel('799674506385555557');
+    const westCampus = client.channels.cache.get("799674506385555557");
+
+}
 /**
  *  Handle a command from a Discord user.
  *
@@ -88,8 +118,10 @@ client.on("ready", () => {
     client.user
         .setActivity(CONFIG.defaultActivity.message, {
             type: CONFIG.defaultActivity.type,
-        })
-        .then();
+        });
+    
+    // Have bot move to East Campus FIRST
+    moveUserToEastCampusVC();
 });
 
 // Handle message from user
@@ -105,6 +137,10 @@ client.on("message", (msg) => {
     //     handleCommand(msg, cmd, args);
     //     return;
     // }
+    if (msg.author.bot) return;
+    
+    
+    //moveUserToWestCampusVC(msg, '799674506385555557');
 });
 
 // Login with the bot's token

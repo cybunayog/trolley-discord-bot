@@ -6,7 +6,7 @@
     "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "cybunayog",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0",
