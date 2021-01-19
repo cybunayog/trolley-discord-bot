@@ -9,16 +9,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 import colors from 'chalk';
 import { Client } from 'discord.js';
-import { clearInterval } from 'timers';
-import { join } from 'path';
 
 // Global Properties
-const activities = ["West Campus", "East Campus"]
+const campus = ["West Campus", "East Campus"]
 const CONFIG = {
     token: process.env.BOT_TOKEN,
     defaultActivity: {
-        type: "STREAMING",
-        message: activities[Math.floor(Math.random() * activities.length)],
+        type: "WATCHING",
+        message: campus[Math.floor(Math.random() * campus.length)],
     }
 }
 
@@ -66,7 +64,7 @@ client.on("ready", () => {
     const east = client.channels.cache.get("799674463414517761"),
         west = client.channels.cache.get("799674506385555557");
     
-    const vcArr = [east, west];
+    const vcArr = [east, west, east, west];
     console.log(colors.green(`Logged in as: ${client.user.tag}`));
 
     // Set the bot's activity
@@ -78,11 +76,10 @@ client.on("ready", () => {
     // Have bot move to East Campus FIRST
     joinCampusVC(vcArr[0]);
 
-    for (const element of vcArr) {
-        setTimeout(() => {
-            joinCampusVC(element);
-        }, 5000);
-    }
+    // Make the switch 10 seconds -> FIX THIS TO BE EXACT
+    setInterval(() => {
+        joinCampusVC(vcArr[Math.floor(Math.random() * vcArr.length)]);
+    }, 10 * 1000);
 
     // client.setInterval(moveUserToCampusVC("799674506385555557"), 3000);
 });
