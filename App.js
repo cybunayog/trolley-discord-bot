@@ -10,6 +10,7 @@ dotenv.config();
 import colors from 'chalk';
 import { Client } from 'discord.js';
 import { clearInterval } from 'timers';
+import { join } from 'path';
 
 // Global Properties
 const activities = ["West Campus", "East Campus"]
@@ -27,19 +28,25 @@ const CONFIG = {
 // For now make 2 functions that will be called
 
 // Step 1) have the bot connect to a VC (DONE)
-// Step 2) have the bot move from VC to VC (WIP)
+// Step 2) have the bot move from VC to VC (ALMOST DONE)
 // Step 3) detect if a user is in the VC
-// Step 4) have the user move with the bot
+// Step 4) have the user move with the bot (it technically already does that with the "voice state" function)
 // Step 5) if user is gone, the bot will continue its drive
+
+// moves users with bot to VC
 async function moveUserToCampusVC(channelID) {
     // VC ID: 799674463414517761
-    const campus = client.channels.cache.get(channelID);
-    console.log(campus);
+    
+}
+
+// Bot joins VC
+async function joinCampusVC(channelID) {
+    const campus = channelID;
     if (!campus) return console.error('This channel does not exist!');
     campus.join()
         .then(connection => {
             // connected!
-            console.log("Successfully connected!");
+            console.log(`Successfully connected at ${connection.channel.name}!`);
         })
         .catch(e => {
             // not connected
@@ -55,6 +62,11 @@ const client = new Client();
 
 // Handle bot connected to the server
 client.on("ready", () => {
+    // VC Objects
+    const east = client.channels.cache.get("799674463414517761"),
+        west = client.channels.cache.get("799674506385555557");
+    
+    const vcArr = [east, west];
     console.log(colors.green(`Logged in as: ${client.user.tag}`));
 
     // Set the bot's activity
@@ -64,14 +76,20 @@ client.on("ready", () => {
         });
     
     // Have bot move to East Campus FIRST
-    moveUserToCampusVC("799674463414517761");
+    joinCampusVC(vcArr[0]);
 
-    client.setInterval(moveUserToCampusVC("799674506385555557"), 3000);
+    for (const element of vcArr) {
+        setTimeout(() => {
+            joinCampusVC(element);
+        }, 5000);
+    }
+
+    // client.setInterval(moveUserToCampusVC("799674506385555557"), 3000);
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-    console.log(oldState);
-    console.log(newState);
+    // console.log(oldState);
+    // console.log(newState);
     // setChannel moves the member to a different channel
     // bot's ID: 799344944623910922
 });
