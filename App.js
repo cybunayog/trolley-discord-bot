@@ -76,10 +76,11 @@ trolleyBot.on("ready", () => {
     // Have bot move to East Campus FIRST
     joinCampusVC(vcArr[0]);
 
-    // Make the switch 10 seconds, for now (It will switch every 5 mins)
+    // Make the switch 10 seconds, for now (It will switch every 2 mins)
     // TODO: Make sure the bot doesn't repeat
     // if bot is already connected to that channel, make the switch to a new channel
     let trolleyBotConnectedVC = trolleyBot.voice.connections;
+    console.log(trolleyBotConnectedVC);
     setInterval(() => {
         joinCampusVC(vcArr[Math.floor(Math.random() * vcArr.length)]);
     }, 10 * 1000);
